@@ -1,7 +1,7 @@
 // In-build imports
 const app = require('express')();
 const http = require('http').createServer(app);
-const expressValidator = require('express-validator')
+const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -34,14 +34,14 @@ app.use(cors(
 ));
 
 app.use(bodyParser.json());
-// app.use(expressValidator());
+app.use(expressValidator());
 
 // To navigate on routes file
-// app.use('/', routes);
+app.use('/', routes);
 
 // Demo route check
 app.get('/', (req, res) => {
-    res.send('Hello from Keep Clone App');
+    res.send('Hello from Keep-Clone App');
 });
 
 // Listen to server request
