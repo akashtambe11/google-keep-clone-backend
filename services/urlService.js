@@ -29,7 +29,7 @@ class UrlService {
 
                         userModel.update({ _id: data._id },
                             {
-                                // User schema Model: data
+                                // Updating data of long_url, short_url, url_code
                                 long_url: longUrl,
                                 short_url: shortUrl,
                                 url_code: urlCode
@@ -66,6 +66,29 @@ class UrlService {
 
             }
         }
+    }
+
+    // To verify user and setting flag true in database
+    verifyUrl(req, callback) {
+
+        userModel.update({ email: req.email },
+            {
+                // Updating value of isVerified: true
+                isVerified: true
+            },
+            (err, data) => {
+
+                if (err) {
+                    callback(err);
+                } else {
+                    let response = {
+                        status: true,
+                        message: 'user verified'
+                    }
+                    callback(null, response);
+                }
+            }
+        )
     }
 }
 

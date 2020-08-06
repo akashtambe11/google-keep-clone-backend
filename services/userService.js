@@ -51,6 +51,10 @@ class UserService {
                 });
         });
     }
+
+    verifyUrl(req) {
+
+    }
 }
 
 

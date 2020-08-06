@@ -8,7 +8,7 @@ const mailService = require('../services/mailService.js');
 class UserController {
 
     async register(req, res) {
-        
+
         try {
             req.check('firstName', 'Length of name should be 2 charecters').isLength({ min: 2 });
             req.check('lastName', 'Last name cannot be empty').notEmpty();
@@ -25,7 +25,7 @@ class UserController {
             userService.register(req.body)
 
                 .then(data => {
-                 
+
                     let request = {
                         email: data.email,
                         // Change it while using Angular at front end (i.e. 4200)
@@ -54,6 +54,28 @@ class UserController {
             response.data = error;
             res.status(404).send(response);
 
+        }
+    }
+
+    // To verify and validate email
+    async verifyMail(req, res) {
+
+        try {
+            // Taking decoded key from req object
+            urlService.verifyUrl(req.decoded, (err, data) => {
+
+                if (err)
+                    res.status(422).send(err);
+                else
+                    res.status(200).send(data);
+
+            });
+        }
+        catch (error) {
+            let response = {};
+            response.success = false;
+            response.data = error;
+            res.status(404).send(response);
         }
     }
 
