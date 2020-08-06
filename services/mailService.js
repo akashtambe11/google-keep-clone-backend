@@ -26,6 +26,7 @@ class MailService {
 
             if (error) {
                 console.log(error);
+
             } else {
                 console.log('email sent: ' + info.response);
             }
@@ -56,6 +57,7 @@ class MailService {
 
             if (error) {
                 console.log(error);
+
             } else {
                 console.log('email sent: ' + info.response);
             }

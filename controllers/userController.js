@@ -37,6 +37,7 @@ class UserController {
 
                         if (err) {
                             res.status(422).send(err);
+
                         } else {
                             // Verification short url send to Email address.
                             mailService.sendVerifyLink(result.shortUrl, result.email);
@@ -66,6 +67,7 @@ class UserController {
 
                 if (err)
                     res.status(422).send(err);
+
                 else
                     res.status(200).send(data);
 
@@ -76,6 +78,49 @@ class UserController {
             response.success = false;
             response.data = error;
             res.status(404).send(response);
+        }
+    }
+
+    // Login
+    async login(req, res) {
+        try {
+            req.check('email', 'Invalid email address').isEmail();
+            req.check('password', 'Invalid password').notEmpty().isLength({ min: 6 });
+
+            const errors = await req.validationErrors();
+            if (errors) {
+                return res.status(422).json({ errors: errors });
+            }
+
+            userService.login(req.body, (err, data) => {
+
+                if (err) {
+                    res.status(422).send(err);
+
+                } else {
+                    let payload = {
+                        id: data.id,
+                        email: data.email,
+                    }
+
+                    let token = authentication.generateToken(payload);
+
+                    // Login response output
+                    let result = {
+                        status: true,
+                        response: data,
+                        token: token,
+                        message: 'login succesful'
+                    }
+                    res.status(200).send(result);
+                }
+            })
+        }
+        catch (error) {
+            let response = {};
+            response.success = false;
+            response.data = error;
+            res.status(422).send(response);
         }
     }
 

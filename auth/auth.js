@@ -6,6 +6,8 @@ const { ReplSet } = require('mongodb');
 class Auth {
     generateToken(payload) {
 
+        console.log('From Auth.js = \n', payload);
+
         let token = jwt.sign(
             payload,
             process.env.JWT_KEY,
@@ -22,7 +24,7 @@ class Auth {
 
                 if (data == null) {
                     let response = {
-                        message: 'no data found'
+                        message: 'No data found'
                     }
                     res.status(422).send(response);
 
@@ -48,9 +50,8 @@ class Auth {
                 }
             })
             .catch(err => {
-                ReplSet.status(422).send(err);
+                res.status(422).send(err);
             })
-
     }
 }
 

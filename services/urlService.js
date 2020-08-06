@@ -35,8 +35,10 @@ class UrlService {
                                 url_code: urlCode
                             },
                             (error, res) => {
+
                                 if (error) {
                                     callback(error);
+
                                 } else {
 
                                     // Registration response output
@@ -62,6 +64,7 @@ class UrlService {
                     message: 'server error',
                     error: error
                 }
+
                 callback(response);
 
             }
@@ -80,6 +83,7 @@ class UrlService {
 
                 if (err) {
                     callback(err);
+
                 } else {
                     let response = {
                         status: true,

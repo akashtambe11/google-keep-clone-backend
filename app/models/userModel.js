@@ -54,7 +54,6 @@ class Model {
                     resolve(data)
                 })
                 .catch(err => {
-                    console.log(err);
                     reject(err);
                 })
         });
@@ -88,13 +87,25 @@ class Model {
 
             if (error) {
                 callback(error);
+
             } else {
                 let response = {
                     email: result.email
                 }
                 callback(null, response);
             }
-        });
+        })
+    }
+
+    login(req, callback) {
+
+        let response = {
+            id: req._id,
+            firstName: req.firstName,
+            email: req.email
+        }
+
+        callback(null, response);
     }
 }
 

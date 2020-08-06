@@ -17,8 +17,8 @@ class UserService {
                         reject({
                             message: 'Email-Id alredy Exist'
                         });
-                    } else {
 
+                    } else {
                         // Password hasing using bcrypt
                         let hash = util.hashPassword(req.password)
                         hash.then(data => {
@@ -36,6 +36,7 @@ class UserService {
 
                                 if (err) {
                                     reject(err);
+
                                 } else {
                                     resolve(result);
                                 }
@@ -52,8 +53,48 @@ class UserService {
         });
     }
 
-    verifyUrl(req) {
+    login(req, callback) {
 
+        userModel.findOne({ email: req.email })
+            .then(data => {
+
+                if (data.isVerified) {
+
+                    util.comparePassword(req.password, data.password, (err, result) => {
+
+                        if (err) {
+                            callback(err);
+
+                        } else if (result) {
+                            
+                            userModel.login(data, (err, res) => {
+
+                                if (err) {
+                                    callback(err);
+
+                                } else {
+                                    callback(null, res);
+                                }
+                            })
+
+                        } else {
+                            callback({
+                                message: 'Invalid Password'
+                            })
+                        }
+                    })
+
+                } else {
+                    callback({
+                        message: 'User not Verified'
+                    })
+                }
+            })
+            .catch(err => {
+                callback({
+                    message: 'User not recognised'
+                })
+            })
     }
 }
 

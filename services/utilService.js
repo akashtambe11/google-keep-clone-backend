@@ -25,6 +25,7 @@ class UtilService {
 
             if (err) {
                 callback(err);
+
             } else {
                 callback(null, result);
             }
