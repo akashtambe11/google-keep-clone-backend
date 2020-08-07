@@ -120,9 +120,93 @@ class UserController {
             let response = {};
             response.success = false;
             response.data = error;
-            res.status(422).send(response);
+            res.status(404).send(response);
         }
     }
+
+
+    async forgot(req, res) {
+        try {
+            req.check('email', 'Invalid Email').isEmail();
+
+            const errors = await req.validationErrors();
+            if (errors) {
+                res.status(422).json({ errors: errors });
+            }
+
+            userService.forgot(req.body)
+                .then(data => {
+                    let payload = {
+                        email: data.email,
+                        id: data.id
+                    }
+
+                    let token = authentication.generateToken(payload);
+
+                    userModel.update({ email: data.email },
+                        { forgot_token: token },
+                        (err, result) => {
+
+                            if (err) {
+                                res.status(422).send(err);
+
+                            } else {
+                                // Change it while using Angular at front end (i.e. 4200)
+                                let url = 'http://localhost:3000/reset/' + token;
+                                mailService.sendForgotLink(url, data.email);
+                                res.status(200).send(data)
+                            }
+                        }
+                    )
+                })
+                .catch(err => {
+                    res.status(402).send(err);
+                })
+        }
+        catch (error) {
+            let response = {};
+            response.success = false;
+            response.data = error;
+            res.status(404).send(response);
+        }
+    }
+
+
+    async reset(req, res) {
+        try {
+
+            req.check('new_password', 'Invalid password').notEmpty().isLength({ min: 6 });
+
+            const errors = await req.validationErrors();
+            if (errors) {
+                res.status(422).json({ errors: errors });
+            }
+
+            let request = {
+                email: req.decoded.email,
+                new_password: req.body.new_password
+            }
+
+            userService.reset(request)
+                .then(data => {
+                    res.status(200).send(data);
+
+                })
+                .catch(err => {
+                    res.status(422).send(err);
+
+                })
+        }
+        catch (error) {
+            let response = {};
+            response.success = false;
+            response.data = error;
+            res.status(404).send(response);
+        }
+    }
+
+
+
 
 }
 

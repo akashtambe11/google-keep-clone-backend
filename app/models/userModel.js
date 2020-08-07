@@ -59,8 +59,11 @@ class Model {
         });
     }
 
+    
     // Method to update requested data in Database.
     update(req, res, callback) {
+
+        console.log(req);
 
         User.updateOne(req, res)
 
@@ -71,6 +74,7 @@ class Model {
                 callback(err);
             })
     }
+
 
     // User Registration
     register(req, callback) {
@@ -97,6 +101,8 @@ class Model {
         })
     }
 
+
+    // User Login
     login(req, callback) {
 
         let response = {
@@ -104,8 +110,30 @@ class Model {
             firstName: req.firstName,
             email: req.email
         }
-
         callback(null, response);
+
+    }
+
+
+    // Password Reset
+    reset(req) {
+        return new Promise((resolve, reject) => {
+
+            User.updateOne({ _id: req._id },
+                { password: req.password },
+                { new: true }
+            )
+                .then(res => {
+                    resolve({
+                        // Reset password output
+                        status: true,
+                        message: "password updated"
+                    });
+                })
+                .catch(err => {
+                    reject(err);
+                })
+        });
     }
 }
 

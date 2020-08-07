@@ -1,6 +1,6 @@
 const userModel = require('../app/models/userModel');
 const util = require('../services/utilService');
-const { register } = require('../controllers/userController');
+
 
 class UserService {
 
@@ -66,7 +66,7 @@ class UserService {
                             callback(err);
 
                         } else if (result) {
-                            
+
                             userModel.login(data, (err, res) => {
 
                                 if (err) {
@@ -95,6 +95,76 @@ class UserService {
                     message: 'User not recognised'
                 })
             })
+    }
+
+
+    forgot(req) {
+        return new Promise((resolve, reject) => {
+
+            userModel.findOne({email: req.email})
+            .then(data => {
+
+                if(data.isVerified) {
+
+                    // Forgot response output
+                    let result = {
+                        status: true,
+                        id: data._id,
+                        email: data.email,
+                        message: 'forgot email sent'
+                    }
+                    resolve(result);
+
+                }else {
+                    reject({
+                        message: 'user not verified'
+                    });
+                }
+            })
+            .catch(err => {
+                reject({
+                    message: 'user not registered'
+                });
+
+            });
+        });
+    }
+
+
+
+    reset(req) {
+
+        return new Promise((resolve, reject) => {
+
+            userModel.findOne({ email: req.email })
+                .then(data => {
+
+                    let hash = util.hashPassword(req.new_password)
+                    hash
+                        .then(res => {
+
+                            let request = {
+                                _id: data._id,
+                                password: res
+                            }
+
+                            userModel.reset(request)
+
+                                .then(response => {
+                                    resolve(response);
+                                })
+                                .catch(err => {
+                                    reject(err);
+                                })
+                        })
+                        .catch(err => {
+                            reject(err);
+                        })
+                })
+                .catch(err => {
+                    reject(err);
+                })
+        })
     }
 }
 
