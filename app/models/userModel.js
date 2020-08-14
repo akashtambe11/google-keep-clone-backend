@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
+    
     firstName: {
         type: String,
         required: true
@@ -42,7 +43,7 @@ const userSchema = mongoose.Schema({
 
 const User = mongoose.model('users', userSchema); //users: collection name
 
-class Model {
+class UserModel {
 
     // Method to find requested data in Database.
     findOne(req) {
@@ -138,4 +139,4 @@ class Model {
 }
 
 
-module.exports = new Model();
+module.exports = new UserModel();
