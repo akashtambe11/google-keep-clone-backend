@@ -64,8 +64,6 @@ class UserModel {
     // Method to update requested data in Database.
     update(req, res, callback) {
 
-        console.log(req);
-
         User.updateOne(req, res)
 
             .then(data => {

@@ -1,20 +1,19 @@
 const mongoose = require('mongoose');
-const { rejects } = require('assert');
 
 const noteSchema = mongoose.Schema({
 
     user_id: {
         type: String,
-        require: true
+        required: true
     },
     title: {
         type: String,
-        require: true,
+        required: true,
         // default: ''
     },
     description: {
         type: String,
-        require: false,
+        required: false,
         default: ''
     },
     lebel: [{
@@ -23,12 +22,12 @@ const noteSchema = mongoose.Schema({
     }],
     reminder: {
         type: Date,
-        require: false,
+        required: false,
         default: null
     },
     color: {
         type: String,
-        require: false,
+        required: false,
         default: null
     },
     isPinned: {
