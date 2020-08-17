@@ -19,9 +19,10 @@ class Auth {
 
 
     verificationToken(req, res, next) {
-        let bearHeader = req.params.shortenUrl;
 
-        userModel.findOne({ url_code: bearHeader })
+        let urlToken = req.params.shortenUrl;
+
+        userModel.findOne({ url_code: urlToken })
             .then(data => {
 
                 if (data == null) {
@@ -39,7 +40,6 @@ class Auth {
 
                     jwt.verify(url, process.env.JWT_KEY, (err, decoded) => {
 
-                       
                         if (err) {
                             req.decoded = null
                             req.authenticated = false;
@@ -78,7 +78,7 @@ class Auth {
                         let emailToken = req.params.token;
 
                         jwt.verify(emailToken, process.env.JWT_KEY, (err, decoded) => {
-                            
+
                             if (err) {
                                 req.decoded = null;
                                 req.authenticated = false;
@@ -102,6 +102,30 @@ class Auth {
             return res.status(422).send({
                 message: 'token not found in url'
             });
+        }
+    }
+
+    loginToken(req, res, next) {
+
+        if (req.headers.token) {
+
+            let bearHeader = req.headers.token;
+
+            jwt.verify(bearHeader, process.env.JWT_KEY, (err, decoded) => {
+
+                if (err) {
+                    req.decoded = null;
+                    res.status(422).send(err + '\ntoken expired');
+
+                } else {
+                    req.decoded = decoded;
+                    next();
+                }
+            });
+        } else {
+            return res.status(422).send({
+                message: "token not found in header"
+            })
         }
     }
 }

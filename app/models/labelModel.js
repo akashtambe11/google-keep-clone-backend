@@ -34,7 +34,7 @@ class LabelModel {
     }
 
     // Method to find requested all data in Database.
-    finAll(req, callback) {
+    findAll(req, callback) {
 
         Label.find(req, (err, data) => {
 
@@ -98,7 +98,7 @@ class LabelModel {
                 let response = {
                     // addLabel output
                     status: true,
-                    _id: data._id,
+                    _id: data._id, //lebel id
                     label_name: data.label_name,
                     message: "lebel created succesfully"
                 }
