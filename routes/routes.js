@@ -16,5 +16,5 @@ router.post('/reset/:token', authentication.resetToken, userController.reset);
 router.post('/label/addLabel', authentication.loginToken, labelController.addLabel);
 router.post('/label/updateLabel', authentication.loginToken, labelController.updateLabel);
 router.post('/label/deleteLabel', authentication.loginToken, labelController.deleteLabel);
-
+router.get('/label/getAllLabels', authentication.loginToken, labelController.getAllLabels);
 module.exports = router;

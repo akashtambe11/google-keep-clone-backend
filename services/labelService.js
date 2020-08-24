@@ -6,7 +6,7 @@ class LabelService {
 
         labelModel.findOne({ label_name: req.label_name })
             .then(data => {
-                // same label can be created infinetly so creating one lebel and refering
+                // same label can be created infinetly so creating one lebel and reffering
                 if (data) {
                     //removed null i.e. (null, data)
                     callback(null, data);
@@ -34,7 +34,7 @@ class LabelService {
         labelModel.update({ _id: req.label_id },
             { label_name: req.label_name },
             (err, data) => {
-              
+
                 if (err) {
                     callback(err)
 
@@ -54,6 +54,22 @@ class LabelService {
             } else {
                 callback(null, data);
             }
+        })
+    }
+
+    getAllLabels(req) {
+
+        return new Promise((resolve, reject) => {
+
+            labelModel.findAll({ user_email: req.email }, (err, success) => {
+
+                if (err) {
+                    reject(err);
+
+                } else {
+                    resolve(success)
+                }
+            })
         })
     }
 }

@@ -39,6 +39,7 @@ class LabelController {
 
     }
 
+
     // NOTE:
     // Non-exist labels are also get updated;
     // Add validation for the same;
@@ -69,38 +70,69 @@ class LabelController {
         catch (error) {
             let response = {};
             response.status = false;
-            response.message = 'UpdateLabel operation failed';
+            response.message = 'updateLabel operation failed';
             res.status(404).send(response);
         }
     }
+
 
     // NOTE:
     // Non-exist labels are also get deleted;
     // Add validation for the same;
     // First find reqested id by findOne method and then add validation 
     async deleteLabel(req, res) {
-        req.check('label_id', 'Label Id cannot be empty').notEmpty();
 
-        const errors = await req.validationErrors();
-        if (errors) {
-            res.status(422).json({ errors: errors });
-        }
+        try {
+            req.check('label_id', 'Label Id cannot be empty').notEmpty();
 
-        let request = {
-            _id: req.body.label_id
-        }
-
-        labelService.delete(request, (err, data) => {
-
-            if (err) {
-                res.status(422).send(err);
-
-            } else {
-
-                //removeLabel service not added yet -----
-                res.status(200).send(data);
+            const errors = await req.validationErrors();
+            if (errors) {
+                res.status(422).json({ errors: errors });
             }
-        })
+
+            let request = {
+                _id: req.body.label_id
+            }
+
+            labelService.delete(request, (err, data) => {
+
+                if (err) {
+                    res.status(422).send(err);
+
+                } else {
+
+                    //removeLabel service not added yet -----
+                    res.status(200).send(data);
+                }
+            })
+        }
+        catch (error) {
+            let response = {};
+            response.status = false;
+            response.message = 'deleteLabel operation failed';
+            res.status(404).send(response);
+        }
+
+    }
+
+
+    getAllLabels(req, res) {
+        
+        try {
+            labelService.getAllLabels(req.decoded)
+                .then(data => {
+                    res.status(200).send(data);
+                })
+                .catch(err => {
+                    res.status(422).send(err);
+                })
+        }
+        catch (error) {
+            let response = {};
+            response.status = false;
+            response.message = 'getAllLabels operation failed';
+            res.status(404).send(response);
+        }
     }
 }
 
