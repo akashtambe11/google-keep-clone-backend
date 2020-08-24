@@ -13,6 +13,8 @@ router.post('/reset/:token', authentication.resetToken, userController.reset);
 //note
 
 //label
-router.post('/label/add', authentication.loginToken, labelController.addLabel);
+router.post('/label/addLabel', authentication.loginToken, labelController.addLabel);
+router.post('/label/updateLabel', authentication.loginToken, labelController.updateLabel);
+router.post('/label/deleteLabel', authentication.loginToken, labelController.deleteLabel);
 
 module.exports = router;

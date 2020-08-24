@@ -27,6 +27,35 @@ class LabelService {
                 callback(err);
             })
     }
+
+
+    update(req, callback) {
+
+        labelModel.update({ _id: req.label_id },
+            { label_name: req.label_name },
+            (err, data) => {
+              
+                if (err) {
+                    callback(err)
+
+                } else {
+                    callback(null, data);
+                }
+            }
+        )
+    }
+
+    delete(req, callback) {
+
+        labelModel.delete(req, (err, data) => {
+            if (err) {
+                callback(err);
+
+            } else {
+                callback(null, data);
+            }
+        })
+    }
 }
 
 module.exports = new LabelService();

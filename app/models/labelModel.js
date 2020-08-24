@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const labelSchema = mongoose.Schema({
 
-    user_id: {
+    user_email: {
         type: String,
         required: true
     },
@@ -61,13 +61,14 @@ class LabelModel {
         Label.findOneAndUpdate(req, res, { new: true })
 
             .then(data => {
-                callback(data);
+                callback(null, data);
             })
             .catch(err => {
                 callback(err)
             })
     }
 
+    // Method to delete requested data in Database.
     delete(req, callback) {
 
         Label.findOneAndDelete(req, (err, data) => {
@@ -85,11 +86,11 @@ class LabelModel {
 
         let lebelObject = new Label({
             label_name: req.label_name,
-            user_id: req.user_id
+            user_email: req.user_email
         })
 
         lebelObject.save((err, data) => {
-            
+
             if (err) {
                 callback(err);
 

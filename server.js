@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded(
         extended: true
     }
 ));
+app.use(bodyParser.json());
 
 // To connect Node js and Client site application (Diff Port) together for communication
 // Cross-Origin Resource Sharing
@@ -33,7 +34,6 @@ app.use(cors(
     }
 ));
 
-app.use(bodyParser.json());
 app.use(expressValidator());
 
 // To navigate on routes file
