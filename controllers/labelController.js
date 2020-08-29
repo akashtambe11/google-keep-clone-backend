@@ -19,7 +19,7 @@ class LabelController {
                 user_email: req.decoded.email // user_id from users collection of database
             }
 
-            console.log(request);
+            // console.log(request);
 
             labelService.add(request, (err, data) => {
                 if (err) {

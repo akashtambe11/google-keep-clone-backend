@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const noteSchema = mongoose.Schema({
 
-    user_id: {
+    user_email: {
         type: String,
         required: true
     },
@@ -16,9 +16,10 @@ const noteSchema = mongoose.Schema({
         required: false,
         default: ''
     },
-    lebel: [{
+    label: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'lebel'
+        ref: 'label'
+        // default: []
     }],
     reminder: {
         type: Date,
@@ -45,7 +46,7 @@ const noteSchema = mongoose.Schema({
         required: false,
         default: false
     },
-},
+}, 
     { timestamp: true }
 )
 
@@ -67,6 +68,93 @@ class NoteModel {
         });
     }
 
+    findAll(req, callback) {
+
+        Note.find(req, (err, data) => {
+
+            if (err) {
+                callback(err);
+
+            } else {
+                callback(null, data)
+            }
+        })
+    }
+
+
+    // findAndPopulate() {
+
+    // }
+
+
+    // findAllAndPopulate() {
+
+    // }
+
+
+    updateOne(req, payload, callback) {
+
+        Note.findOneAndUpdate(req, payload, { new: true })
+            .then(data => {
+                callback(null, data);
+            })
+            .catch(err => {
+                callback(err);
+            })
+    }
+
+
+    updateMany(req, res, callback) { 
+
+        Note.updateMany(req, res, { new: true })
+            .then(data => {
+                callback(null, data);
+            })
+            .catch(err => {
+                callback(err);
+            })
+    }
+
+
+    deleteOne(req, callback) {
+
+        Note.findOneAndDelete(req) 
+            .then(data => {
+                callback(null, data);
+            })
+            .catch(err => {
+                callback(err);  
+            })
+    }
+
+    add(req, callback) {
+        const note = new Note({
+            user_email: req.user_email,
+            title: req.title,
+            description: req.description,
+            reminder: req.reminder,
+            color: req.color,
+            isPinned: req.isPinned,
+            isArchived: req.isArchived,
+            isTrash: req.isTrash
+        })
+
+        note.save((err, data) => {
+
+            if (err) {
+                callback(err);
+
+            } else {
+
+                let response = {
+                    id: data._id,
+                    title: note.title,
+                    message: 'note created successfully'
+                }
+                callback(null, data);
+            }
+        })
+    }
 }
 
 module.exports = new NoteModel();

@@ -101,7 +101,7 @@ class LabelModel {
                     status: true,
                     _id: data._id, //lebel id
                     label_name: data.label_name,
-                    message: "lebel created succesfully"
+                    message: "label created succesfully"
                 }
                 callback(null, response);
             }

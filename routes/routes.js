@@ -2,6 +2,7 @@ const router = require('express').Router();
 const userController = require('../controllers/userController');
 const authentication = require('../auth/auth');
 const labelController = require('../controllers/labelController');
+const noteController = require('../controllers/noteController');
 
 //user
 router.post('/register', userController.register);
@@ -11,6 +12,7 @@ router.post('/forgot', userController.forgot);
 router.post('/reset/:token', authentication.resetToken, userController.reset);
 
 //note
+router.post('/note/addNote', authentication.loginToken, noteController.addNote);
 
 //label
 router.post('/label/addLabel', authentication.loginToken, labelController.addLabel);
