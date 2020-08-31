@@ -46,7 +46,7 @@ const noteSchema = mongoose.Schema({
         required: false,
         default: false
     },
-}, 
+},
     { timestamp: true }
 )
 
@@ -87,9 +87,19 @@ class NoteModel {
     // }
 
 
-    // findAllAndPopulate() {
+    findAllAndPopulate(req, callback) {
+        Note.find(req)
+            .populate({ path: 'label' })
+            .exec((err, data) => {
 
-    // }
+                if (err) {
+                    callback(err);
+
+                } else {
+                    callback(null, data);
+                }
+            });
+    }
 
 
     updateOne(req, payload, callback) {
@@ -104,7 +114,7 @@ class NoteModel {
     }
 
 
-    updateMany(req, res, callback) { 
+    updateMany(req, res, callback) {
 
         Note.updateMany(req, res, { new: true })
             .then(data => {
@@ -118,14 +128,14 @@ class NoteModel {
 
     deleteOne(req, callback) {
 
-        Note.findOneAndDelete(req) 
+        Note.findOneAndDelete(req)
             .then(data => {
                 callback(null, data);
             })
             .catch(err => {
-                callback(err);  
+                callback(err);
             })
-    } 
+    }
 
     add(req, callback) {
         const note = new Note({

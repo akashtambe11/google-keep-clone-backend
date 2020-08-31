@@ -78,6 +78,52 @@ class NoteService {
             }
         })
     }
+
+    getAllNotes(req) {
+
+        return new Promise((resolve, reject) => {
+
+            noteModel.findAllAndPopulate({ user_email: req.email }, (err, data) => {
+
+                if (err) {
+                    reject(err);
+
+                } else {
+
+                    // Intialise empty array to push data in it.
+                    let noteArray = [];
+
+                    for (let i = 0; i < data.length; i++) {
+
+                        if (data[i].reminder == null) {
+
+                            let request = {
+                                id: data[i]._id,
+                                title: data[i].title,
+                                description: data[i].description,
+                                label: data[i].label,
+                                reminder: data[i].reminder,
+                                color: data[i].color,
+                                isPinned: data[i].isPinned,
+                                isArchived: data[i].isArchived,
+                                isTrash: data[i].isTrash,
+                            }
+                            noteArray.push(request);
+
+                        } else {
+                            //  --------------- not null reminder not added yet
+                            console.log("reminder with not null will be added later");
+                        }
+                    }
+                    // ----------- redis set to be added here
+                    resolve(data)
+
+                }
+            })
+        })
+    }
+
+    
 }
 
 module.exports = new NoteService();

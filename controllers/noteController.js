@@ -31,9 +31,9 @@ class NoteController {
 
                 if (err) {
                     res.status(422).send(err);
-                    
+
                 } else {
-                    
+
                     // addNote output
                     let response = {
                         id: data._id,
@@ -42,14 +42,39 @@ class NoteController {
                     }
                     res.status(200).send(response)
                 }
-            }) 
+            })
 
         }
         catch (error) {
             let response = {};
             response.status = false;
             response.message = error.message;
-            res.status(404).send(response); 
+            res.status(404).send(response);
+        }
+    }
+
+
+    getListing(req, res) {
+
+    }
+
+
+    getAllNotes(req, res) {
+        try {
+
+            noteService.getAllNotes(req.decoded)
+                .then(data => {
+                    res.status(200).send(data);
+
+                })
+                .catch(err => {
+                    res.status(422).send(err);
+
+                })
+
+        }
+        catch (error) {
+            res.status(422).send({ message: "Operation failed" });
         }
     }
 

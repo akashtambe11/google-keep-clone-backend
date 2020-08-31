@@ -13,6 +13,7 @@ router.post('/reset/:token', authentication.resetToken, userController.reset);
 
 //note
 router.post('/note/addNote', authentication.loginToken, noteController.addNote);
+router.get('/note/getAllNotes', authentication.loginToken, noteController.getAllNotes);
 
 //label
 router.post('/label/addLabel', authentication.loginToken, labelController.addLabel);
