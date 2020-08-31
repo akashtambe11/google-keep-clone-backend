@@ -7,13 +7,13 @@ class NoteService {
 
     add(req, callback) {
 
+        // add method called to save note
         noteModel.add(req, (err, res) => {
 
             if (err) {
                 callback(err);
 
             } else {
-
                 let count = 0;
 
                 // If label not found in body
@@ -32,6 +32,7 @@ class NoteService {
                         label_name: req.label[i]
                     }
 
+                    // Label service is called to add label attached to note
                     labelService.add(newLabelPayload, (err, result) => {
 
                         if (result._id != null) {
@@ -43,10 +44,11 @@ class NoteService {
                             // To create object for update in mongoDB
                             let label = {
                                 $addToSet: {
-                                    label: labelID 
+                                    label: labelID
                                 }
-                            } 
+                            }
 
+                            // Update note according to title
                             noteModel.updateOne({ title: req.title }, label, (error, success) => {
 
                                 if (error) {
@@ -55,7 +57,9 @@ class NoteService {
                                 } else {
                                     count++;
 
+                                    // Callback all data when count reaches to label length
                                     if (count == req.label.length) {
+
                                         callback(null, success);
                                     }
                                 }

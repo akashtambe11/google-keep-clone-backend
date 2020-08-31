@@ -9,7 +9,7 @@ const noteSchema = mongoose.Schema({
     title: {
         type: String,
         required: true,
-        // default: ''
+        default: ''
     },
     description: {
         type: String,
@@ -125,7 +125,7 @@ class NoteModel {
             .catch(err => {
                 callback(err);  
             })
-    }
+    } 
 
     add(req, callback) {
         const note = new Note({
@@ -139,18 +139,13 @@ class NoteModel {
             isTrash: req.isTrash
         })
 
+        // Save method to save note in database
         note.save((err, data) => {
 
             if (err) {
                 callback(err);
 
             } else {
-
-                let response = {
-                    id: data._id,
-                    title: note.title,
-                    message: 'note created successfully'
-                }
                 callback(null, data);
             }
         })
