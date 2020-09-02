@@ -1,4 +1,5 @@
 const labelModel = require('../app/models/labelModel');
+const noteModel = require('../app/models/noteModel');
 
 class LabelService {
 
@@ -8,7 +9,6 @@ class LabelService {
             .then(data => {
                 // same label can be created infinetly so creating one lebel and reffering
                 if (data) {
-                    //removed null i.e. (null, data)
                     callback(null, data);
 
                 } else {
@@ -28,7 +28,6 @@ class LabelService {
             })
     }
 
-
     update(req, callback) {
 
         labelModel.update({ _id: req.label_id },
@@ -45,9 +44,42 @@ class LabelService {
         )
     }
 
+    search(req, query) {
+
+        return new Promise((resolve, reject) =>{
+
+            noteModel.findAndPopulate(req, query, (err, data) => {
+                if(err) {
+                    reject(err);
+
+                } else {
+                    resolve(data);
+                }
+            })
+        })
+    }
+
+    // searchLabel(req) {
+
+    //     return new Promise((resolve, reject) => {
+
+    //         labelModel.findAll(req, (err, success) => {
+
+    //             if (err) {
+    //                 reject(err);
+
+    //             } else {
+    //                 resolve(success)
+    //             }
+    //         })
+    //     })
+    // }
+
+
     delete(req, callback) {
 
         labelModel.delete(req, (err, data) => {
+
             if (err) {
                 callback(err);
 

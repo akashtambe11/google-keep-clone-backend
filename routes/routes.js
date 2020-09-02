@@ -14,6 +14,7 @@ router.post('/reset/:token', authentication.resetToken, userController.reset);
 //note
 router.post('/note/addNote', authentication.loginToken, noteController.addNote);
 router.get('/note/getAllNotes', authentication.loginToken, noteController.getAllNotes);
+router.post('/note/searchNote', authentication.loginToken, noteController.searchNotes);
 
 //label
 router.post('/label/addLabel', authentication.loginToken, labelController.addLabel);

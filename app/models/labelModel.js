@@ -36,6 +36,8 @@ class LabelModel {
     // Method to find requested all data in Database.
     findAll(req, callback) {
 
+
+        console.log(req);
         Label.find(req, (err, data) => {
 
             if (err) {

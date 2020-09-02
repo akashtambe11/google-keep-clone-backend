@@ -82,12 +82,29 @@ class NoteModel {
     }
 
 
-    // findAndPopulate() {
+    findAndPopulate(req, query, callback) {
 
-    // }
+        Note.find(req)
+            .populate({
+                path: 'label',
+                match: { label_name: query.label_name }
+            })
+            .exec((err, data) => {
+
+                if (err) {
+                    callback(err);
+
+                } else {
+                    // result not added yet
+                    
+                    callback(null, data);
+                }
+            })
+    }
 
 
     findAllAndPopulate(req, callback) {
+
         Note.find(req)
             .populate({ path: 'label' })
             .exec((err, data) => {
@@ -114,7 +131,7 @@ class NoteModel {
     }
 
 
-    updateMany(req, res, callback) {
+    updateMany(req, res, callback) { 
 
         Note.updateMany(req, res, { new: true })
             .then(data => {

@@ -21,7 +21,6 @@ class NoteService {
 
                     //this.getAllNotes({email:req.user_email});
                     callback(null, res);
-
                 }
 
                 // Each label get index, and one by one label will be added in array
@@ -79,6 +78,7 @@ class NoteService {
         })
     }
 
+
     getAllNotes(req) {
 
         return new Promise((resolve, reject) => {
@@ -115,7 +115,7 @@ class NoteService {
                             console.log("reminder with not null will be added later");
                         }
                     }
-                    // ----------- redis set to be added here
+                    // ----------- redis set method to be added here
                     resolve(data)
 
                 }
@@ -123,7 +123,41 @@ class NoteService {
         })
     }
 
-    
+
+    searchNote(req, callback) {
+
+        let searchContent = req.search;
+
+        // query object will be sent for find and populate data
+        let noteQuery = {
+
+            // AND operation for contains searchContent and decoded email from req
+            $and: [
+                {
+                    // OR opertion for different keys of notes
+                    $or: [
+                        { 'title': { $regex: searchContent, $options: 'i' } },
+                        { 'description': { $regex: searchContent, $options: 'i' } },
+                    ]
+                },
+                { 'user_email': req.email }
+            ]
+        }
+
+        noteModel.findAllAndPopulate(noteQuery, (err, res) => {
+
+            if (err) {
+                callback(err);
+
+            } else {
+                callback(null, res);
+            }
+        })
+
+
+    }
+
+
 }
 
 module.exports = new NoteService();
