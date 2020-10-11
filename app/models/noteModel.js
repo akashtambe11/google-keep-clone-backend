@@ -96,7 +96,7 @@ class NoteModel {
 
                 } else {
                     // result not added yet
-                    
+
                     callback(null, data);
                 }
             })
@@ -131,7 +131,7 @@ class NoteModel {
     }
 
 
-    updateMany(req, res, callback) { 
+    updateMany(req, res, callback) {
 
         Note.updateMany(req, res, { new: true })
             .then(data => {

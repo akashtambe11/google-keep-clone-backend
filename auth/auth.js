@@ -105,6 +105,7 @@ class Auth {
         }
     }
 
+
     loginToken(req, res, next) {
 
         if (req.headers.token) {
@@ -129,5 +130,6 @@ class Auth {
         }
     }
 }
+
 
 module.exports = new Auth();

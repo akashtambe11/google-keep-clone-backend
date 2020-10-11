@@ -58,23 +58,53 @@ class NoteController {
 
     // }
 
+    updateNote(req, res) {
 
-    getAllNotes(req, res) {
         try {
+            req.check('note_id', 'Note id cannot be empty').notEmpty();
 
-            noteService.getAllNotes(req.decoded)
-                .then(result => {
-                    res.status(200).send(result);
+            const errors = req.validationErrors();
+            if (errors) {
+                res.send(422).json({ errors: errors })
+            }
 
-                })
-                .catch(err => {
-                    res.status(422).send(err);
+            if ('title' in req.body ||
+                'description' in req.body ||
+                'color' in req.body ||
+                'reminder' in req.body ||
+                'isArchived' in req.body ||
+                'isPinned' in req.body ||
+                'isTrash' in req.body &&
+                'email' in req.decoded) {
 
-                })
+                let note = {
+                    // user_email: req.decoded.email,
+                    note_id: req.body.note_id,
+                    title: req.body.title || null,
+                    description: req.body.description || null,
+                    reminder: req.body.reminder || null,
+                    color: req.body.color || null,
+                    isPinned: req.body.isPinned || false,
+                    isArchived: req.body.isArchived || false,
+                    isTrash: req.body.isTrash || false
+                }
+
+                noteService.updateNote(note)
+                    .then(data => {
+                        res.status(200).send(data);
+                    })
+                    .catch(err => {
+                        res.status(422).send(err);
+                    })
+            }
 
         }
         catch (error) {
-            res.status(422).send({ message: "Operation failed" });
+            let response = {};
+            response.status = false;
+            response.data = error;
+            response.message = "Operation failed";
+            res.status(404).send(response);
         }
     }
 
@@ -82,7 +112,7 @@ class NoteController {
     searchNotes(req, res) {
         try {
 
-            // search content should bi in body
+            // search content should be in body
             if ('search' in req.body && 'email' in req.decoded) {
 
                 req.check('search', 'search content cannot be empty').notEmpty();
@@ -117,6 +147,57 @@ class NoteController {
             let response = {};
             response.status = false;
             response.data = error;
+            res.status(404).send(response);
+        }
+    }
+
+
+    getAllNotes(req, res) {
+        try {
+
+            noteService.getAllNotes(req.decoded)
+                .then(result => {
+                    res.status(200).send(result);
+
+                })
+                .catch(err => {
+                    res.status(422).send(err);
+
+                })
+
+        }
+        catch (error) {
+            res.status(422).send({ message: "Operation failed" });
+        }
+    }
+
+
+    deleteNote(req, res) {
+
+        try {
+
+            req.check('note_id', 'Note id cannot be empty').notEmpty();
+
+            const errors = req.validationErrors();
+            if (errors) {
+                res.send(422).json({ errors: errors })
+            }
+
+            noteService.deleteNote(req.body, (err, data) => {
+
+                if (err) {
+                    res.status(422).send(err);
+
+                } else {
+                    res.status(200).send(data);
+                }
+            })
+        }
+        catch (error) {
+            let response = {};
+            response.status = false;
+            response.data = error;
+            response.message = "Operation failed";
             res.status(404).send(response);
         }
     }
